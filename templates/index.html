@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestForge AI - Intelligent Test Case Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/marked@4.3.0/marked.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-900 text-gray-800 dark:text-gray-200 min-h-screen font-['Inter']">
+    <!-- Background decoration -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-400/10 to-transparent rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <!-- <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-primary-dark rounded-2xl shadow-lg mb-6">
+                <i class="fas fa-robot text-3xl text-white"></i>
+            </div> -->
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-primary via-purple-600 to-primary-dark bg-clip-text text-transparent mb-4">
+                TestForge AI
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Transform your requirements into comprehensive test cases and automation scripts with AI-powered intelligence
+            </p>
+            <div class="flex items-center justify-center gap-6 mt-6 text-sm text-gray-500 dark:text-gray-400">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Manual Test Cases</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-code text-blue-500"></i>
+                    <span>Automation Scripts</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-bolt text-yellow-500"></i>
+                    <span>AI-Powered</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Main Input Section -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center">
+                        <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Project Requirements</h2>
+                </div>
+                
+                <!-- Input Type Tabs -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">Input Method</label>
+                    <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+                        <button id="btn-plain-text" class="tab-active flex-1 px-6 py-3 rounded-lg text-primary dark:text-primary-light bg-white dark:bg-gray-600 shadow-sm transition-all duration-200 font-medium">
+                            <i class="fas fa-keyboard mr-2"></i>Plain Text
+                        </button>
+                        <button id="btn-srs-upload" class="flex-1 px-6 py-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all duration-200 font-medium">
+                            <i class="fas fa-upload mr-2"></i>Document Upload
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Plain Text Input -->
+                <div id="plain-text-input" class="mb-6">
+                    <label for="requirements" class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-edit mr-2"></i>Project Description
+                    </label>
+                    <textarea id="requirements" rows="6" class="w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 text-base dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none" placeholder="Describe your project requirements, user stories, or paste your SRS content here..."></textarea>
+                </div>
+                
+                <!-- File Upload Input -->
+                <div id="file-upload-input" class="mb-6 hidden">
+                    <label for="srs-file" class="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i>Upload Document
+                    </label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="srs-file" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <div class="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-white"></i>
+                                </div>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="font-semibold">Click to upload</span> or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    PDF, DOCX, or TXT (MAX. 10MB)
+                                </p>
+                            </div>
+                            <input id="srs-file" type="file" class="hidden" accept=".pdf,.docx,.txt" />
+                        </label>
+                    </div>
+                    <div id="file-name" class="mt-3 text-sm text-gray-500 dark:text-gray-400"></div>
+                    <div id="file-content" class="mt-3 hidden">
+                        <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">File Preview</label>
+                        <div class="w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 h-32 overflow-auto text-sm"></div>
+                    </div>
+                </div>
+                
+                <!-- Generation Options -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-2xl">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-cogs mr-2 text-primary"></i>Generation Options
+                        </h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center p-3 bg-white dark:bg-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+                                <input type="checkbox" id="manual-tests" checked class="form-checkbox text-primary h-5 w-5 rounded">
+                                <span class="ml-3 font-medium">Manual Test Cases</span>
+                                <i class="fas fa-user-check ml-auto text-gray-400"></i>
+                            </label>
+                            <label class="flex items-center p-3 bg-white dark:bg-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+                                <input type="checkbox" id="automation-scripts" checked class="form-checkbox text-primary h-5 w-5 rounded">
+                                <span class="ml-3 font-medium">Automation Scripts</span>
+                                <i class="fas fa-code ml-auto text-gray-400"></i>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="automation-framework-section" class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-2xl">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-tools mr-2 text-primary"></i>Automation Framework
+                        </h3>
+                        <select id="automation-framework" class="w-full p-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 text-base dark:bg-gray-600 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                            <option value="selenium">Selenium WebDriver</option>
+                            <option value="playwright">Playwright</option>
+                            <option value="cypress">Cypress</option>
+                            <option value="robot">Robot Framework</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Generate Button -->
+                <button id="generate-btn" class="w-full py-4 bg-gradient-to-r from-primary via-purple-600 to-primary-dark hover:from-primary-dark hover:via-purple-700 hover:to-primary-dark text-white rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl shadow-lg">
+                    <i class="fas fa-magic mr-2"></i>
+                    <span>Generate Test Cases</span>
+                </button>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="results-section" class="hidden">
+                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-check text-white"></i>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Generated Test Cases</h2>
+                    </div>
+                    
+                    <!-- Results Tabs -->
+                    <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-xl mb-6">
+                        <button id="tab-manual" class="tab-active flex-1 py-3 px-6 rounded-lg text-primary dark:text-primary-light bg-white dark:bg-gray-600 shadow-sm transition-all duration-200 font-medium">
+                            <i class="fas fa-user-check mr-2"></i>Manual Test Cases
+                        </button>
+                        <button id="tab-automation" class="flex-1 py-3 px-6 rounded-lg text-gray-500 dark:text-gray-400 transition-all duration-200 font-medium">
+                            <i class="fas fa-code mr-2"></i>Automation Scripts
+                        </button>
+                    </div>
+                    
+                    <!-- Loading Section -->
+                    <div id="loading" class="flex flex-col items-center justify-center py-16 hidden">
+                        <div class="loading-spinner mb-6"></div>
+                        <p id="loading-text" class="text-gray-600 dark:text-gray-400 text-lg font-medium">Generating test cases...</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">This may take a few moments</p>
+                    </div>
+                    
+                    <!-- Content Sections -->
+                    <div id="manual-content" class="result-content">
+                        <!-- Manual test case content will be inserted here -->
+                    </div>
+                    
+                    <div id="automation-content" class="result-content hidden">
+                        <!-- Automation script content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-gray-500 dark:text-gray-400">
+            <p class="text-sm">
+                Powered by <span class="text-primary font-medium">TestForge AI</span> - Intelligent Test Case Generation
+            </p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
