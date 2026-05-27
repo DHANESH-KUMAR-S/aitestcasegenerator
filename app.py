@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "AIzaSyDPy4NbGPPbMawrRVZ6GQdpI1sDaO3Z5cI")
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "AIzaSyBSP_lAKVRDiqOh2B4UdK5Rj4l020ZBKcA")
 GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
 
 client = genai.Client(api_key=GEMINI_API_KEY)
