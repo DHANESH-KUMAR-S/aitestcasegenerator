@@ -5,7 +5,11 @@ import random
 from werkzeug.utils import secure_filename
 from google import genai
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'),
+    static_folder=os.path.join(os.path.dirname(__file__), '..', 'static')
+)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
