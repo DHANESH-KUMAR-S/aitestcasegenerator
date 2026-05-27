@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "AIzaSyBm-s0NA43uxsKJq11asUu-j3QBSZG2904")
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "AIzaSyDPy4NbGPPbMawrRVZ6GQdpI1sDaO3Z5cI")
 GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
 
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -19,36 +19,30 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'docx'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def call_gemini(prompt, max_retries=5):
-    """Call Gemini with retries, jitter, and model fallbacks for 503/429 errors."""
-    models_to_try = [
-        GEMINI_MODEL,
-        'gemini-2.0-flash',
-        'gemini-1.5-flash',
-    ]
+def call_gemini(prompt, max_retries=3):
+    """Call Gemini 2.5 Flash with retries for transient errors."""
     last_err = None
-    for model in models_to_try:
-        for attempt in range(max_retries):
-            try:
-                response = client.models.generate_content(
-                    model=model,
-                    contents=prompt,
-                    config={
-                        'temperature': 0.4,
-                        'top_k': 32,
-                        'top_p': 0.95,
-                        'max_output_tokens': 8192,
-                    }
-                )
-                return getattr(response, 'text', None) or ''
-            except Exception as e:
-                last_err = e
-                msg = str(e)
-                if any(x in msg for x in ('503', 'UNAVAILABLE', 'overloaded', '429', 'rate')):
-                    delay = min(16, 2 ** attempt) + random.uniform(0, 0.5)
-                    time.sleep(delay)
-                    continue
-                break  # non-transient error, try next model
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={
+                    'temperature': 0.4,
+                    'top_k': 32,
+                    'top_p': 0.95,
+                    'max_output_tokens': 8192,
+                }
+            )
+            return getattr(response, 'text', None) or ''
+        except Exception as e:
+            last_err = e
+            msg = str(e)
+            if any(x in msg for x in ('503', 'UNAVAILABLE', 'overloaded', '429', 'rate')):
+                delay = min(16, 2 ** attempt) + random.uniform(0, 0.5)
+                time.sleep(delay)
+                continue
+            break
     raise Exception(str(last_err))
 
 
